@@ -14,10 +14,10 @@ Loading Python package through HTTP(s):
 >>> import micropip
 >>> await micropip.install("pyodide-importer")
 
->>> from pyodide_importer import register_hook
->>> url = "https://raw.githubusercontent.com/ryanking13/pyodide-importer/main/test_modules/"
->>> register_hook(url)
->>> # now you can import python packages from `url`
+>>> from pyodide_importer import ImportHook
+>>> hook = ImportHook("https://raw.githubusercontent.com/ryanking13/pyodide-importer/main/test_modules/")
+>>> hook.register()
+>>> # now you can import python packages from the url
 
 >>> # https://raw.githubusercontent.com/ryanking13/pyodide-importer/main/test_modules/file_module.py
 >>> import file_module

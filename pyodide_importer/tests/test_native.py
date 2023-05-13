@@ -10,15 +10,16 @@ from . import TEST_MODULE_URL
 @pytest.fixture(scope="function")
 def hook():
     tempdir = tempfile.TemporaryDirectory()
-    pyfinder = pyodide_importer.register_hook(
+    hook = pyodide_importer.ImportHook(
         base_url=TEST_MODULE_URL,
         download_path=tempdir.name,
         update_syspath=True,
     )
+    hook.register()
 
-    yield pyfinder
+    yield hook
 
-    pyodide_importer.unregister_hook()
+    hook.unregister()
     tempdir.cleanup()
 
 
@@ -28,7 +29,7 @@ def cleanup_imports():
 
     # Cleanup imported modules
     cleanup_targets = []
-    for module in sys.modules:
+    for modulehook in sys.modules:
         if module.startswith(("file_module", "regular_module")):
             cleanup_targets.append(module)
 
@@ -83,7 +84,7 @@ def test_nohook():
 
 
 def test_unregister_hook(hook):
-    pyodide_importer.unregister_hook()
+    hook.unregister()
     with pytest.raises(ModuleNotFoundError):
         import file_module
 

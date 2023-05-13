@@ -37,7 +37,7 @@ def test_file_module(playwright_standalone):
             import micropip
             await micropip.install("pyodide-importer")
             import pyodide_importer
-            pyodide_importer.register_hook("%s")
+            pyodide_importer.ImportHook("%s").register()
             import file_module
             assert file_module.hello() == "%s"
         `)
@@ -57,7 +57,7 @@ def test_regular_module(playwright_standalone):
             import micropip
             await micropip.install("pyodide-importer")
             import pyodide_importer
-            pyodide_importer.register_hook("%s")
+            pyodide_importer.ImportHook("%s").register()
             import regular_module
             assert regular_module.hello() == "%s"
         `)
